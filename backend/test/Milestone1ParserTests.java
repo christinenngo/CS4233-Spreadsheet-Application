@@ -8,6 +8,9 @@ import spreadsheet.Model.Expression.OperatorFactory;
 import spreadsheet.Model.Parser.ExpressionParser;
 import spreadsheet.Model.Expression.Expression;
 
+import java.util.ArrayDeque;
+import java.util.Queue;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 public class Milestone1ParserTests {
@@ -58,6 +61,18 @@ public class Milestone1ParserTests {
         Expression expression = ExpressionParser.convertExpression(raw);
 
         assertFalse(expression instanceof OperandExpression);
+    }
+
+    @Test
+    public void testPostfixToExpression() {
+        Queue<String> postfix = new ArrayDeque<>();
+        postfix.add("14");
+        postfix.add("6");
+        postfix.add("+");
+
+        Expression expression = ExpressionParser.postfixToExpression(postfix);
+
+        assertTrue(expression instanceof OperandExpression);
     }
 
 }

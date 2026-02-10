@@ -298,7 +298,7 @@ public class ExpressionParser {
      * @param outputQueue the Postfix tokens
      * @return the Expression object
      */
-    private static Expression postfixToExpression(Queue<String> outputQueue){
+    public static Expression postfixToExpression(Queue<String> outputQueue){
         Deque<Expression> stack = new ArrayDeque<>();
         OperatorFactory factory = new OperatorFactory();
 
