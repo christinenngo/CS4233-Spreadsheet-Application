@@ -20,6 +20,9 @@ import java.util.regex.Pattern;
 
 import spreadsheet.Model.CellRepository;
 import spreadsheet.Model.Expression.Expression;
+import spreadsheet.Model.Expression.OperandExpression;
+import spreadsheet.Model.Expression.OperatorExpression;
+import spreadsheet.Model.Expression.OperatorFactory;
 
 /**
  * ExpressionParser is responsible for converting a string literal to a computable "Expression"
@@ -297,16 +300,34 @@ public class ExpressionParser {
      */
     private static Expression postfixToExpression(Queue<String> outputQueue){
         Deque<Expression> stack = new ArrayDeque<>();
+        OperatorFactory factory = new OperatorFactory();
 
         while(!outputQueue.isEmpty()){
             String token = outputQueue.poll();
 
             if (isConstant(token)){
-                // TODO: Create constant Expression and push to stack
+                // Create constant Expression and push to stack
+                stack.push(new OperandExpression(Double.parseDouble(token)));
             } else if (isCellSymbol(token)){
-                // TODO: Create cell reference Expression and push to stack
+                // Create cell reference Expression and push to stack
+                throw new IllegalArgumentException("Cell references not implemented yet");
             }  else {
-                // TODO: Create operator Expression; pop operands from stack; push operator to stack
+                // Create operator Expression; pop operands from stack; push operator to stack
+                int arguments = 2;
+                OperatorExpression expression = factory.getOperator(token);
+                ArrayList<Expression> tempOperands = new ArrayList<>();
+
+                for (int i = 0; i < arguments; i++) {
+                    tempOperands.add(stack.pop());
+
+                }
+                Collections.reverse(tempOperands);
+
+                for(Expression operand: tempOperands){
+                    expression.addOperand(operand);
+                }
+
+                stack.push(expression);
             }
         }
 
@@ -357,7 +378,7 @@ public class ExpressionParser {
 
     /**
      * Convert a string number into the numerical row representation
-     * @param colString the Row as a string
+     * @param rowString the Row as a string
      * @return an int representing the row
      */
     private static int getRow(String rowString){
