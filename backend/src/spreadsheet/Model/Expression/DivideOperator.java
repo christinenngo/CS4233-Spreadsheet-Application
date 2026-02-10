@@ -2,7 +2,7 @@ package spreadsheet.Model.Expression;
 
 import spreadsheet.Model.Cell.CellValue;
 
-public class DivideOperator extends AbstractExpression {
+public class DivideOperator extends OperatorExpression {
     @Override
     public CellValue evaluate() {
         double quotient = 0.0;
