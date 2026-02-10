@@ -1,4 +1,5 @@
 # Design Decisions
+Milestone 1
 Christine Ngo
 
 > Used the Composite design pattern to allow for the tree structure of expressions, so that each expression can be evaluated recursively with a leaf (OperandExpression) and node (OperatorExpression). This allows for flexibility in the types of expressions that can be created and evaluated.
