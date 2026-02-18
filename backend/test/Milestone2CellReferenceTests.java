@@ -55,10 +55,55 @@ public class Milestone2CellReferenceTests{
 
     @Test
     public void testSingleCellReference3() {
-        String raw = "=B1";
+        String raw = "=D2";
         Expression expression = ExpressionParser.convertExpression(raw);
 
         CellValue value = expression.evaluate();
-        assertEquals(20.0, value.asDouble());
+        assertEquals(15.0, value.asDouble());
+    }
+
+    @Test
+    public void testSingleCellReferenceNoValue() {
+        String raw = "=C1";
+        Expression expression = ExpressionParser.convertExpression(raw);
+
+        CellValue value = expression.evaluate();
+        assertEquals(0.0, value.asDouble());
+    }
+
+    @Test
+    public void testCellReferenceAddition1() {
+        String raw = "=A1 + 20";
+        Expression expression = ExpressionParser.convertExpression(raw);
+
+        CellValue value = expression.evaluate();
+        assertEquals(30.0, value.asDouble());
+    }
+
+    @Test
+    public void testCellReferenceAddition2() {
+        String raw = "=A1 + D2";
+        Expression expression = ExpressionParser.convertExpression(raw);
+
+        CellValue value = expression.evaluate();
+        assertEquals(25.0, value.asDouble());
+    }
+
+    @Test
+    public void testCellReferenceComplex1() {
+        String raw = "=A1*((100-B1)/((B1+D1)/D1))";
+        Expression expression = ExpressionParser.convertExpression(raw);
+
+        CellValue value = expression.evaluate();
+        assertEquals(160.0, value.asDouble());
+    }
+
+    @Test
+    public void testCellReferenceComplex2() {
+        String raw = "=A1+C2*(D2+100/(10+B1+D1))";
+        Expression expression = ExpressionParser.convertExpression(raw);
+
+        CellValue value = expression.evaluate();
+        assertEquals(10.0, value.asDouble());
     }
 }
