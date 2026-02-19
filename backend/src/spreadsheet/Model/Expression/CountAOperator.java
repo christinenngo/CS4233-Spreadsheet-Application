@@ -14,7 +14,8 @@ public class CountAOperator extends OperatorExpression {
             if(operand instanceof CellReferenceExpression cellReferenceExpression) {
                 count += cellReferenceExpression.getCellComponent().getNumNonEmptyCells();
             } else {
-                if(operand.evaluate() != null && operand.evaluate().nonEmpty()) {
+                CellValue value = operand.evaluate();
+                if(value != null && value.nonEmpty()) {
                     count++;
                 }
             }

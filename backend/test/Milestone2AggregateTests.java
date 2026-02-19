@@ -153,20 +153,38 @@ public class Milestone2AggregateTests {
 
     @Test
     public void testSingleCellAve1() {
-        String raw = "=AVE(C2)";
+        String raw = "=AVE(102)";
         Expression expression = ExpressionParser.convertExpression(raw);
 
         CellValue value = expression.evaluate();
-        assertEquals(3.0, value.asDouble());
+        assertEquals(102.0, value.asDouble());
     }
 
     @Test
     public void testSingleCellAve2() {
+        String raw = "=AVE(10,5*4)";
+        Expression expression = ExpressionParser.convertExpression(raw);
+
+        CellValue value = expression.evaluate();
+        assertEquals(15.0, value.asDouble());
+    }
+
+    @Test
+    public void testSingleCellAve3() {
+        String raw = "=AVE(C2)";
+        Expression expression = ExpressionParser.convertExpression(raw);
+
+        CellValue value = expression.evaluate();
+        assertEquals(0.0, value.asDouble());
+    }
+
+    @Test
+    public void testSingleCellAve4() {
         String raw = "=AVE(A1,B1,A2)";
         Expression expression = ExpressionParser.convertExpression(raw);
 
         CellValue value = expression.evaluate();
-        assertEquals(3.0, value.asDouble());
+        assertEquals(20.0, value.asDouble());
     }
 
     @Test
@@ -175,16 +193,16 @@ public class Milestone2AggregateTests {
         Expression expression = ExpressionParser.convertExpression(raw);
 
         CellValue value = expression.evaluate();
-        assertEquals(4.0, value.asDouble());
+        assertEquals(25.0, value.asDouble());
     }
 
     @Test
     public void testCellGroupAveComplex() {
-        String raw = "=AVE(A1:B2, D1, 10/2)";
+        String raw = "=AVE(A1:B2, D1, 18/2)";
         Expression expression = ExpressionParser.convertExpression(raw);
 
         CellValue value = expression.evaluate();
-        assertEquals(6.0, value.asDouble());
+        assertEquals(19.0, value.asDouble());
     }
 
 }

@@ -12,6 +12,7 @@ public class OperatorFactory {
         Supplier<OperatorExpression> SUM = SumOperator::new;
         Supplier<OperatorExpression> COUNT = CountOperator::new;
         Supplier<OperatorExpression> COUNTA = CountAOperator::new;
+        Supplier<OperatorExpression> AVE = AveOperator::new;
 
         HashMap<String, Supplier<OperatorExpression>> operators = new HashMap<>();
         operators.put("+", ADD);
@@ -21,7 +22,7 @@ public class OperatorFactory {
         operators.put("SUM", SUM);
         operators.put("COUNT", COUNT);
         operators.put("COUNTA", COUNTA);
-//        operators.put("AVE", AVE);
+        operators.put("AVE", AVE);
 
         return operators.get(operatorType).get();
     }
