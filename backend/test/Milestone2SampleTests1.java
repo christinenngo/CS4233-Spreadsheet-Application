@@ -9,7 +9,7 @@ import spreadsheet.Model.Expression.Expression;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 
-public class Milestone2SampleTests {
+public class Milestone2SampleTests1 {
     private CellRepository repository;
     private CellComponent cellA1, cellA2, cellB1, cellB2, cellC1, cellC2, cellD1, cellD2;
 

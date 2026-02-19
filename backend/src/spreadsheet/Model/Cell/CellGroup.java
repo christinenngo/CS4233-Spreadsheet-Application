@@ -34,7 +34,15 @@ public class CellGroup extends CellComponent {
     }
 
     public CellValue getCellValue() {
-        throw new UnsupportedOperationException("Method is for cells only.");
+        double sum = 0.0;
+        for (CellComponent component : cellComponents) {
+            if (component.getCellValue() == null) {
+                sum += 0.0;
+            } else {
+                sum += component.getCellValue().asDouble();
+            }
+        }
+        return new CellValue(sum);
     }
 
     public CellValue setCellValue(CellValue cellValue) {
