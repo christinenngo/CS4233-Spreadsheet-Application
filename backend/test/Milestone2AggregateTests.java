@@ -76,7 +76,7 @@ public class Milestone2AggregateTests {
         Expression expression = ExpressionParser.convertExpression(raw);
 
         CellValue value = expression.evaluate();
-        assertEquals(3.0, value.asDouble());
+        assertEquals(1.0, value.asDouble());
     }
 
     @Test
@@ -90,11 +90,11 @@ public class Milestone2AggregateTests {
 
     @Test
     public void testCellGroupCount() {
-        String raw = "=COUNT(A1:B2)";
+        String raw = "=COUNT(A1:D2)";
         Expression expression = ExpressionParser.convertExpression(raw);
 
         CellValue value = expression.evaluate();
-        assertEquals(4.0, value.asDouble());
+        assertEquals(8.0, value.asDouble());
     }
 
     @Test
@@ -104,6 +104,51 @@ public class Milestone2AggregateTests {
 
         CellValue value = expression.evaluate();
         assertEquals(6.0, value.asDouble());
+    }
+
+    @Test
+    public void testSingleCellCountA1() {
+        String raw = "=COUNTA(B2)";
+        Expression expression = ExpressionParser.convertExpression(raw);
+
+        CellValue value = expression.evaluate();
+        assertEquals(1.0, value.asDouble());
+    }
+
+    @Test
+    public void testSingleCellCountA2() {
+        String raw = "=COUNTA(A1,B1,A2)";
+        Expression expression = ExpressionParser.convertExpression(raw);
+
+        CellValue value = expression.evaluate();
+        assertEquals(3.0, value.asDouble());
+    }
+
+    @Test
+    public void testSingleCellCountA3() {
+        String raw = "=COUNTA(C1,C2)";
+        Expression expression = ExpressionParser.convertExpression(raw);
+
+        CellValue value = expression.evaluate();
+        assertEquals(0.0, value.asDouble());
+    }
+
+    @Test
+    public void testCellGroupCountA() {
+        String raw = "=COUNTA(A1:D2)";
+        Expression expression = ExpressionParser.convertExpression(raw);
+
+        CellValue value = expression.evaluate();
+        assertEquals(6.0, value.asDouble());
+    }
+
+    @Test
+    public void testCellGroupCountAComplex() {
+        String raw = "=COUNTA(A1:B2, C1, 10/2)";
+        Expression expression = ExpressionParser.convertExpression(raw);
+
+        CellValue value = expression.evaluate();
+        assertEquals(5.0, value.asDouble());
     }
 
     @Test
