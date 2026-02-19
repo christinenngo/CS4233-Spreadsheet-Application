@@ -51,7 +51,7 @@ public class Cell extends CellComponent {
         return this.expression;
     }
 
-    public int getNumCellComponents() {
+    public int getNumCells() {
         return 1;
     }
 

@@ -19,7 +19,7 @@ public class CellGroup extends CellComponent {
         return (CellComponent)cellComponents.get(componentIndex);
     }
 
-    public int getNumCellComponents() {
+    public int getNumCells() {
         return cellComponents.size();
     }
 

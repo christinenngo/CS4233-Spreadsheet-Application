@@ -12,6 +12,10 @@ public class CellReferenceExpression extends OperatorExpression {
         this.cellComponent = cellComponent;
     }
 
+    public CellComponent getCellComponent() {
+        return cellComponent;
+    }
+
     @Override
     public CellValue evaluate() {
         return cellComponent.getCellValue();
