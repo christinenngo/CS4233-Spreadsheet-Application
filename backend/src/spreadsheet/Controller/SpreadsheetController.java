@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import spreadsheet.Model.Cell.*;
 import spreadsheet.Model.CellCoord;
 import spreadsheet.Model.CellRepository;
-import spreadsheet.Model.Expression.Expression;
+import spreadsheet.Model.Expression.*;
 import spreadsheet.Model.Parser.ExpressionParser;
 
 import java.util.*;
@@ -182,6 +182,45 @@ public class SpreadsheetController {
         // For cell reference A1: "A1"
         // For addition of A1 and B1: "A1 + B1"
         // For SUM(A1:D2,A3,B3:D3)/COUNT(A1:D3)-AVE(A1:D2,A3,B3:D3)  : "SUM(A1:D2,A3,B3:D3)/COUNT(A1:D3)-AVE(A1:D2,A3,B3:D3)"
+
+        if(expr instanceof OperandExpression operandExpression) {
+            return operandExpression.evaluate().toString();
+        }
+
+        if(expr instanceof CellReferenceExpression cellReferenceExpression) {
+            CellComponent component = cellReferenceExpression.getCellComponent();
+            if(component instanceof CellGroup cellGroup) {
+                ArrayList<CellComponent> cells = cellGroup.getCellComponents();
+                CellCoord leftCoord = CellRepository.getInstance().findCellCoord(cells.get(0));
+                CellCoord rightCoord = CellRepository.getInstance().findCellCoord(cells.get(1));
+
+                return convertCoord(leftCoord.getRow(), leftCoord.getCol()) + ":" + convertCoord(rightCoord.getRow(), rightCoord.getCol());
+            } else {
+                CellCoord coord = CellRepository.getInstance().findCellCoord(cellReferenceExpression.getCellComponent());
+                return convertCoord(coord.getRow(), coord.getCol());
+            }
+        }
+
+        if(expr instanceof OperatorExpression operatorExpression) {
+            String operator = OperatorFactory.getOperatorString(operatorExpression);
+            int numOperands = operatorExpression.getOperands().size();
+
+            if("+-*/".contains(operator)) {
+                return "(" + expressionToString(operatorExpression.getOperands().get(0)) + operator + expressionToString(operatorExpression.getOperands().get(1)) + ")";
+            } else {
+                StringBuilder sb = new StringBuilder();
+                sb.append(operator).append("(");
+                for(int i = 0; i < numOperands; i++) {
+                    sb.append(expressionToString(operatorExpression.getOperands().get(i)));
+                    if(i < numOperands - 1) {
+                        sb.append(",");
+                    }
+                }
+                sb.append(")");
+                return sb.toString();
+            }
+        }
+
         return expr.toString();
     }
 

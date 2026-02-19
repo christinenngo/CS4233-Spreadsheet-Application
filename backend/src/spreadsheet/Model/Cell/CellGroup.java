@@ -1,5 +1,6 @@
 package spreadsheet.Model.Cell;
 
+import spreadsheet.Model.CellCoord;
 import spreadsheet.Model.Expression.Expression;
 
 import java.util.ArrayList;
@@ -15,12 +16,12 @@ public class CellGroup extends CellComponent {
         cellComponents.remove(newCellComponent);
     }
 
-    public CellComponent getCellComponent(int componentIndex) {
-        return (CellComponent)cellComponents.get(componentIndex);
-    }
-
     public int getNumCells() {
         return cellComponents.size();
+    }
+
+    public ArrayList<CellComponent> getCellComponents() {
+        return cellComponents;
     }
 
     public int getNumNonEmptyCells() {

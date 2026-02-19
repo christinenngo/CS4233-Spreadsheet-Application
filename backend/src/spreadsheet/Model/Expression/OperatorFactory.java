@@ -13,17 +13,17 @@ import java.util.HashMap;
 import java.util.function.Supplier;
 
 public class OperatorFactory {
-    public static OperatorExpression getOperator(String operatorType) {
-        Supplier<OperatorExpression> ADD = AddOperator::new;
-        Supplier<OperatorExpression> SUBTRACT = SubtractOperator::new;
-        Supplier<OperatorExpression> MULTIPLY = MultiplyOperator::new;
-        Supplier<OperatorExpression> DIVIDE = DivideOperator::new;
-        Supplier<OperatorExpression> SUM = SumOperator::new;
-        Supplier<OperatorExpression> COUNT = CountOperator::new;
-        Supplier<OperatorExpression> COUNTA = CountAOperator::new;
-        Supplier<OperatorExpression> AVE = AveOperator::new;
+    private static final HashMap<String, Supplier<OperatorExpression>> operators = new HashMap<>();
+    private static final Supplier<OperatorExpression> ADD = AddOperator::new;
+    private static final Supplier<OperatorExpression> SUBTRACT = SubtractOperator::new;
+    private static final Supplier<OperatorExpression> MULTIPLY = MultiplyOperator::new;
+    private static final Supplier<OperatorExpression> DIVIDE = DivideOperator::new;
+    private static final Supplier<OperatorExpression> SUM = SumOperator::new;
+    private static final Supplier<OperatorExpression> COUNT = CountOperator::new;
+    private static final Supplier<OperatorExpression> COUNTA = CountAOperator::new;
+    private static final Supplier<OperatorExpression> AVE = AveOperator::new;
 
-        HashMap<String, Supplier<OperatorExpression>> operators = new HashMap<>();
+    static {
         operators.put("+", ADD);
         operators.put("-", SUBTRACT);
         operators.put("*", MULTIPLY);
@@ -32,7 +32,18 @@ public class OperatorFactory {
         operators.put("COUNT", COUNT);
         operators.put("COUNTA", COUNTA);
         operators.put("AVE", AVE);
+    }
 
+    public static OperatorExpression getOperator(String operatorType) {
         return operators.get(operatorType).get();
+    }
+
+    public static String getOperatorString(OperatorExpression operator) {
+        for(String key : operators.keySet()) {
+            if(operators.get(key).get().getClass() == operator.getClass()) {
+                return key;
+            }
+        }
+        return null;
     }
 }

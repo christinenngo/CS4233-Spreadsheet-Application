@@ -9,7 +9,10 @@
  */
 package spreadsheet.Model.Cell;
 
+import spreadsheet.Model.CellCoord;
 import spreadsheet.Model.Expression.Expression;
+
+import java.util.ArrayList;
 
 /**
  * Cell class representing a single cell in the spreadsheet.
@@ -70,7 +73,7 @@ public class Cell extends CellComponent {
         throw new UnsupportedOperationException("Method is for cell groups only.");
     }
 
-    CellComponent getCellComponent(int componentIndex){
+    public ArrayList<CellComponent> getCellComponents(){
         throw new UnsupportedOperationException("Method is for cell groups only.");
     }
 }
