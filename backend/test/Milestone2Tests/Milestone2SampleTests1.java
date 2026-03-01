@@ -1,3 +1,5 @@
+package Milestone2Tests;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import spreadsheet.Model.Cell.CellComponent;

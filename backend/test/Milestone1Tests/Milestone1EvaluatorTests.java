@@ -1,16 +1,15 @@
+package Milestone1Tests;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-import org.springframework.expression.spel.ast.Operator;
 import spreadsheet.Model.Cell.CellValue;
 import spreadsheet.Model.Expression.OperandExpression;
 import spreadsheet.Model.Expression.OperatorExpression;
 import spreadsheet.Model.Expression.OperatorFactory;
-import spreadsheet.Model.Parser.ExpressionParser;
-import spreadsheet.Model.Expression.Expression;
 
 public class Milestone1EvaluatorTests {
     @BeforeAll
