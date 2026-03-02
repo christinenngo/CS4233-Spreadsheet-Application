@@ -2,8 +2,11 @@ package spreadsheet.Model.Cell;
 
 import spreadsheet.Model.CellCoord;
 import spreadsheet.Model.Expression.Expression;
+import spreadsheet.Observer.Observer;
+import spreadsheet.Observer.Subject;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public abstract class CellComponent {
     public abstract void add(CellComponent newCellComponent);
@@ -13,5 +16,10 @@ public abstract class CellComponent {
     public abstract int getNumNonEmptyCells();
     public abstract CellValue getCellValue();
     public abstract CellValue setCellValue(CellValue cellValue);
-    abstract Expression getExpression();
+    public abstract void setExpression(Expression expression);
+    public abstract Expression getExpression();
+    public abstract void addObserver(Observer observer);
+    public abstract void removeObserver(Observer observer);
+    public abstract void notifyObservers();
+    public abstract void update();
 }

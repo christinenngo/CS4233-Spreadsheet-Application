@@ -2,14 +2,21 @@ package spreadsheet.Model.Cell;
 
 import spreadsheet.Model.CellCoord;
 import spreadsheet.Model.Expression.Expression;
+import spreadsheet.Observer.Observer;
+import spreadsheet.Observer.Subject;
 
 import java.util.ArrayList;
+import java.util.List;
 
-public class CellGroup extends CellComponent {
+public class CellGroup extends CellComponent implements Observer, Subject {
     protected ArrayList<CellComponent> cellComponents = new <CellComponent> ArrayList();
+
+    private List<Observer> observers = new ArrayList<>();
 
     public void add(CellComponent newCellComponent) {
         cellComponents.add(newCellComponent);
+        newCellComponent.addObserver(this);
+        notifyObservers();
     }
 
     public void remove(CellComponent cellComponent) {
@@ -50,7 +57,34 @@ public class CellGroup extends CellComponent {
         throw new UnsupportedOperationException("Method is for cells only.");
     }
 
-    Expression getExpression() {
+    public void setExpression(Expression expression) {
         throw new UnsupportedOperationException("Method is for cells only.");
     }
+
+    public Expression getExpression() {
+        throw new UnsupportedOperationException("Method is for cells only.");
+    }
+
+    @Override
+    public void addObserver(Observer observer) {
+        observers.add(observer);
+    }
+
+    @Override
+    public void removeObserver(Observer observer) {
+        observers.remove(observer);
+    }
+
+    @Override
+    public void notifyObservers() {
+        for (Observer observer : observers){
+            observer.update();
+        }
+    }
+
+    @Override
+    public void update() {
+        notifyObservers();
+    }
+
 }

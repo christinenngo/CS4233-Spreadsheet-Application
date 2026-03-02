@@ -11,13 +11,16 @@ package spreadsheet.Model.Cell;
 
 import spreadsheet.Model.CellCoord;
 import spreadsheet.Model.Expression.Expression;
+import spreadsheet.Observer.Observer;
+import spreadsheet.Observer.Subject;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Cell class representing a single cell in the spreadsheet.
  */
-public class Cell extends CellComponent {
+public class Cell extends CellComponent implements Observer, Subject {
     /*The current value of the cell, either a constant or the result of evaluating its expression
     * if the expression of the cell is not null, then "value" holds the value the expression evaluates to.
     * */
@@ -25,6 +28,8 @@ public class Cell extends CellComponent {
     /* expression is the expression assigned to the cell, if any
     * if the cell is assigned a constant value, expression will be null. */
     private Expression expression;
+
+    private List<Observer> observers = new ArrayList<>();
 
     public Cell(CellValue value){
         this.value = value;
@@ -37,6 +42,7 @@ public class Cell extends CellComponent {
     public CellValue setCellValue(CellValue newValue){
         this.expression = null;
         this.value = newValue;
+        notifyObservers();
         return this.value;
     }
 
@@ -46,8 +52,20 @@ public class Cell extends CellComponent {
      * --------------------------------------------------------
      */
     public void setExpression(Expression expression){
+        if (this.expression != null){
+            for (CellComponent cellComponent : this.expression.getReferencedCells()){
+                cellComponent.removeObserver(this);
+            }
+        }
+
         this.expression = expression;
+
+        for (CellComponent cellComponent : expression.getReferencedCells()){
+            cellComponent.addObserver(this);
+        }
+
         this.value = expression.evaluate();
+        notifyObservers();
     }
 
     public Expression getExpression(){
@@ -75,5 +93,30 @@ public class Cell extends CellComponent {
 
     public ArrayList<CellComponent> getCellComponents(){
         throw new UnsupportedOperationException("Method is for cell groups only.");
+    }
+
+    @Override
+    public void addObserver(Observer observer) {
+        observers.add(observer);
+    }
+
+    @Override
+    public void removeObserver(Observer observer) {
+        observers.remove(observer);
+    }
+
+    @Override
+    public void notifyObservers() {
+        for (Observer observer : observers){
+            observer.update();
+        }
+    }
+
+    @Override
+    public void update() {
+        if (expression != null) {
+            this.value = expression.evaluate();
+        }
+        notifyObservers();
     }
 }
