@@ -1,10 +1,7 @@
 package spreadsheet.Model.Expression.Factory;
 
 import spreadsheet.Model.Expression.AggregateOperatorExpression;
-import spreadsheet.Model.Expression.AggregateOperators.AveOperator;
-import spreadsheet.Model.Expression.AggregateOperators.CountAOperator;
-import spreadsheet.Model.Expression.AggregateOperators.CountOperator;
-import spreadsheet.Model.Expression.AggregateOperators.SumOperator;
+import spreadsheet.Model.Expression.AggregateOperators.*;
 import spreadsheet.Model.Expression.ArithmeticOperatorExpression;
 
 import java.util.HashMap;
@@ -16,12 +13,18 @@ public class AggregateOperatorFactory extends AbstractFactory {
     private static final Supplier<AggregateOperatorExpression> COUNT = CountOperator::new;
     private static final Supplier<AggregateOperatorExpression> COUNTA = CountAOperator::new;
     private static final Supplier<AggregateOperatorExpression> AVE = AveOperator::new;
+    private static final Supplier<AggregateOperatorExpression> MIN = MinOperator::new;
+    private static final Supplier<AggregateOperatorExpression> MAX = MaxOperator::new;
+    private static final Supplier<AggregateOperatorExpression> MEDIAN = MedianOperator::new;
 
     static {
         operators.put("SUM", SUM);
         operators.put("COUNT", COUNT);
         operators.put("COUNTA", COUNTA);
         operators.put("AVE", AVE);
+        operators.put("MIN", MIN);
+        operators.put("MAX", MAX);
+        operators.put("MEDIAN", MEDIAN);
     }
 
     @Override

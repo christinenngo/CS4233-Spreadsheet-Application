@@ -83,15 +83,17 @@ public class Cell extends CellComponent implements Observer, Subject {
         return 0;
     }
 
+    public ArrayList<CellComponent> getCellComponents(){
+        ArrayList<CellComponent> cellComponents = new ArrayList<>();
+        cellComponents.add(this);
+        return cellComponents;
+    }
+
     public void add(CellComponent newCellComponent){
         throw new UnsupportedOperationException("Method is for cell groups only.");
     }
 
     public void remove(CellComponent newCellComponent){
-        throw new UnsupportedOperationException("Method is for cell groups only.");
-    }
-
-    public ArrayList<CellComponent> getCellComponents(){
         throw new UnsupportedOperationException("Method is for cell groups only.");
     }
 

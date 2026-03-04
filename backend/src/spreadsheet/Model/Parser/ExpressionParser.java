@@ -107,7 +107,7 @@ public class ExpressionParser {
         regexBuilder.append("|[A-Za-z]+\\d+");
 
         // Part for function names (e.g., SUM, AVG, etc.) followed by a (
-        regexBuilder.append("|(?i)(SUM|AVE|COUNT|COUNTA|MAX)(?=\\()");
+        regexBuilder.append("|(?i)(SUM|AVE|COUNT|COUNTA|MIN|MAX|MEDIAN)(?=\\()");
 
         // Part for numbers (integers and decimals)
         regexBuilder.append("|(?<![\\d\\)])-?\\d+(\\.\\d+)?");
@@ -224,7 +224,7 @@ public class ExpressionParser {
         return switch (operator) {
             case "+", "-" -> 1;
             case "*", "/" -> 2;
-            case "SUM", "AVE", "COUNT", "COUNTA", "MAX" -> 3;
+            case "SUM", "AVE", "COUNT", "COUNTA", "MIN", "MAX", "MEDIAN" -> 3;
             default -> 0;
         };
     }
@@ -245,7 +245,7 @@ public class ExpressionParser {
      */
     private static boolean isAggregateSymbol(String token){
         return token.equals("SUM") || token.equals("AVE") ||
-               token.equals("COUNT") || token.equals("COUNTA")  || token.equals("MAX");
+               token.equals("COUNT") || token.equals("COUNTA")  || token.equals("MIN") || token.equals("MAX") || token.equals("MEDIAN");
     }
 
     /**

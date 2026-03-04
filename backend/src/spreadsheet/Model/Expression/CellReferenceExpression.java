@@ -4,6 +4,7 @@ import spreadsheet.Model.Cell.CellComponent;
 import spreadsheet.Model.Cell.CellValue;
 import spreadsheet.Observer.Observer;
 
+import java.util.HashSet;
 import java.util.Set;
 
 
@@ -25,6 +26,6 @@ public class CellReferenceExpression extends AbstractExpression {
 
     @Override
     public Set<CellComponent> getReferencedCells() {
-        return Set.of(cellComponent);
+        return new HashSet<>(cellComponent.getCellComponents());
     }
 }
