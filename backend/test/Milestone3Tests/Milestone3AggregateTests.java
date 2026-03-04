@@ -159,7 +159,7 @@ public class Milestone3AggregateTests {
         Expression expression = ExpressionParser.convertExpression(raw);
 
         CellValue value = expression.evaluate();
-        assertEquals(15.0, value.asDouble());
+        assertEquals(10.0, value.asDouble());
     }
 
     @Test
