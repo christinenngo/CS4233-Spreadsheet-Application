@@ -60,7 +60,7 @@ public class Milestone3AggregateTests {
         Expression expression = ExpressionParser.convertExpression(raw);
 
         CellValue value = expression.evaluate();
-        assertEquals(0.0, value.asDouble());
+        assertEquals(5.0, value.asDouble());
     }
 
     @Test
@@ -79,6 +79,15 @@ public class Milestone3AggregateTests {
 
         CellValue value = expression.evaluate();
         assertEquals(0.0, value.asDouble());
+    }
+
+    @Test
+    public void testMin6() {
+        String raw = "=MIN(A1:B2, D2, 20)";
+        Expression expression = ExpressionParser.convertExpression(raw);
+
+        CellValue value = expression.evaluate();
+        assertEquals(10.0, value.asDouble());
     }
 
     @Test
@@ -127,6 +136,15 @@ public class Milestone3AggregateTests {
     }
 
     @Test
+    public void testMax6() {
+        String raw = "=MAX(A1:B2, D2, 20)";
+        Expression expression = ExpressionParser.convertExpression(raw);
+
+        CellValue value = expression.evaluate();
+        assertEquals(40.0, value.asDouble());
+    }
+
+    @Test
     public void testMedian1() {
         String raw = "=MEDIAN(10)";
         Expression expression = ExpressionParser.convertExpression(raw);
@@ -137,7 +155,7 @@ public class Milestone3AggregateTests {
 
     @Test
     public void testMedian2() {
-        String raw = "=MEDIAN(A1, B1, 15)";
+        String raw = "=MEDIAN(A1, B1, 15, 1, 10)";
         Expression expression = ExpressionParser.convertExpression(raw);
 
         CellValue value = expression.evaluate();
@@ -150,7 +168,7 @@ public class Milestone3AggregateTests {
         Expression expression = ExpressionParser.convertExpression(raw);
 
         CellValue value = expression.evaluate();
-        assertEquals(12.5, value.asDouble());
+        assertEquals(17.5, value.asDouble());
     }
 
     @Test
@@ -159,7 +177,7 @@ public class Milestone3AggregateTests {
         Expression expression = ExpressionParser.convertExpression(raw);
 
         CellValue value = expression.evaluate();
-        assertEquals(15.0, value.asDouble());
+        assertEquals(20.0, value.asDouble());
     }
 
     @Test
