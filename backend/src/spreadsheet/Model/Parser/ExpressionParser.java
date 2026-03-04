@@ -107,7 +107,10 @@ public class ExpressionParser {
         regexBuilder.append("|[A-Za-z]+\\d+");
 
         // Part for function names (e.g., SUM, AVG, etc.) followed by a (
-        regexBuilder.append("|(?i)(SUM|AVE|COUNT|COUNTA|MIN|MAX|MEDIAN)(?=\\()");
+        regexBuilder.append("|(?i)(SUM|AVE|COUNT|COUNTA|MIN|MAX|MEDIAN|ABS|NEG)(?=\\()");
+
+        // Part for unary operators (++, --)
+        regexBuilder.append("|\\+\\+|--");
 
         // Part for numbers (integers and decimals)
         regexBuilder.append("|(?<![\\d\\)])-?\\d+(\\.\\d+)?");
@@ -175,7 +178,7 @@ public class ExpressionParser {
             } else if (isAggregateSymbol(token)) {  // Aggregate function
                 operatorDeque.push(token);  // Push aggregate to operator stack
                 argumentDeque.push(1);
-            } else if (isArithmeticSymbol(token)) {  // Arithmetic operator
+            } else if (isArithmeticSymbol(token) || isUnarySymbol(token)) {  // Arithmetic or Unary operator
                 while (!operatorDeque.isEmpty() && precedence(operatorDeque.peek()) >= precedence(token)) {
                     outputQueue.offer(operatorDeque.pop());  // Pop operators to queue based on precedence
                 }
@@ -225,6 +228,7 @@ public class ExpressionParser {
             case "+", "-" -> 1;
             case "*", "/" -> 2;
             case "SUM", "AVE", "COUNT", "COUNTA", "MIN", "MAX", "MEDIAN" -> 3;
+            case "++", "--", "ABS", "NEG" -> 4;
             default -> 0;
         };
     }
@@ -264,6 +268,12 @@ public class ExpressionParser {
      */
     private static boolean isCellSymbol(String token){
         return token.matches("([A-Za-z]+\\d+)(:[A-Za-z]+\\d+)?");
+    }
+
+    private static boolean isUnarySymbol(String token){
+        return token.equals("++") || token.equals("--")
+                || token.equals("ABS")
+                || token.equals("NEG");
     }
 
     /** ------------------------------------------------
@@ -334,14 +344,18 @@ public class ExpressionParser {
                 AbstractExpression expression = null;
                 AbstractFactory arithmeticFactory = FactoryProducer.getFactory("ARITHMETIC");
                 AbstractFactory aggregateFactory = FactoryProducer.getFactory("AGGREGATE");
+                AbstractFactory unaryFactory = FactoryProducer.getFactory("UNARY");
 
                 int arguments = 0;
                 if(isAggregateSymbol(token)){
                     arguments = Integer.parseInt(outputQueue.poll());
                     expression = aggregateFactory.getAggregateOperator(token);
-                } else if (isArithmeticSymbol(token)){
+                } else if(isArithmeticSymbol(token)){
                     arguments = 2;
                     expression = arithmeticFactory.getArithmeticOperator(token);
+                } else if(isUnarySymbol(token)) {
+                    arguments = 1;
+                    expression = unaryFactory.getUnaryOperator(token);
                 }
 
                 if (expression != null) {

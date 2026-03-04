@@ -8,7 +8,8 @@ public class AbsOperator extends UnaryOperatorExpression {
     public CellValue evaluate() {
         double result = operands.stream()
                 .mapToDouble(num -> num.evaluate().asDouble())
-                .sum() + 1;
+                .map(Math::abs)
+                .sum();
         return new CellValue(result);
     }
 }

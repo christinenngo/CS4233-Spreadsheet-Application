@@ -8,7 +8,8 @@ public class NegateOperator extends UnaryOperatorExpression {
     public CellValue evaluate() {
         double result = operands.stream()
                 .mapToDouble(num -> num.evaluate().asDouble())
-                .sum() + 1;
+                .map(num -> -num)
+                .sum();
         return new CellValue(result);
     }
 }
