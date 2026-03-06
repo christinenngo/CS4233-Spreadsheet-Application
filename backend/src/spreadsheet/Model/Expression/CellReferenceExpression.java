@@ -2,11 +2,9 @@ package spreadsheet.Model.Expression;
 
 import spreadsheet.Model.Cell.CellComponent;
 import spreadsheet.Model.Cell.CellValue;
-import spreadsheet.Observer.Observer;
 
 import java.util.HashSet;
 import java.util.Set;
-
 
 public class CellReferenceExpression extends AbstractExpression {
     private CellComponent cellComponent;

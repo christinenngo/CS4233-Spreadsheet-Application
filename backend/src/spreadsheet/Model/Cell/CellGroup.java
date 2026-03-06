@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CellGroup extends CellComponent implements Observer, Subject {
-    protected ArrayList<CellComponent> cellComponents = new <CellComponent> ArrayList();
+    protected ArrayList<CellComponent> cellComponents = new ArrayList<>();
 
     private List<Observer> observers = new ArrayList<>();
 
@@ -21,6 +21,7 @@ public class CellGroup extends CellComponent implements Observer, Subject {
 
     public void remove(CellComponent cellComponent) {
         cellComponents.remove(cellComponent);
+        cellComponent.removeObserver(this);
     }
 
     public int getNumCells() {
