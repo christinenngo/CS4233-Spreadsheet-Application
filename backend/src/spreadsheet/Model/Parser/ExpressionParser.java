@@ -110,8 +110,8 @@ public class ExpressionParser {
         regexBuilder.append("|(?i)(SUM|AVE|COUNT|COUNTA|MIN|MAX|MEDIAN|ABS|NEG)(?=\\()");
 
         // Part for unary operators (++, --)
-        regexBuilder.append("|(?:(?<=^)|(?<=\\s)|(?<=\\())\\+\\+");
-        regexBuilder.append("|(?:(?<=^)|(?<=\\s)|(?<=\\())--");
+        regexBuilder.append("|(?:(?<=^)|(?<=\\s)|(?<=\\()|(?<=,))\\+\\+");
+        regexBuilder.append("|(?:(?<=^)|(?<=\\s)|(?<=\\()|(?<=,))--");
 
         // Part for numbers (integers and decimals)
         regexBuilder.append("|(?<![\\d\\)])-?\\d+(\\.\\d+)?");
