@@ -15,3 +15,5 @@ Christine Ngo
 > Extended the AbstractExpression class to add support for unary methods, which didn't require any changes to the existing code except the parser since it's a subclass. This allowed for better organization and separation of unary operators from the other operator types.
 > 
 > For the new aggregate operators (min, max, and median), I only needed to extend AggregateOperatorExpression and implement each operator's logic in evaluate. I didn't need to modify any existing code and only added to the factory for aggregate operators to support the new operators.
+>
+> Used Java8's Stream API to implement the logic for the new aggregate operators, which allowed for more concise code when calculating the minimum, maximum, and median and made it easier to filter out null values since they aren't included in the calculations.
