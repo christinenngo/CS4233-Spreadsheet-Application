@@ -11,6 +11,7 @@ package spreadsheet.Controller;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import spreadsheet.Command.EditCommand;
 import spreadsheet.Model.Cell.*;
 import spreadsheet.Model.CellCoord;
 import spreadsheet.Model.CellRepository;
@@ -19,6 +20,7 @@ import spreadsheet.Model.Expression.Factory.AggregateOperatorFactory;
 import spreadsheet.Model.Expression.Factory.ArithmeticOperatorFactory;
 import spreadsheet.Model.Expression.Factory.UnaryOperatorFactory;
 import spreadsheet.Model.Parser.ExpressionParser;
+import spreadsheet.Command.CommandStack;
 
 import java.util.*;
 
@@ -29,6 +31,8 @@ public class SpreadsheetController {
 
     private static final int ROWS = CellRepository.ROWS;
     private static final int COLS = CellRepository.COLUMNS;
+
+    private final CommandStack commandStack =  new CommandStack();
 
     /* ---------------------------------------
        GET entire spreadsheet in row-major grid
@@ -55,6 +59,18 @@ public class SpreadsheetController {
         // See SampleGETResponse.md file for example output
     }
 
+    @PostMapping("/undo")
+    public ResponseEntity<?> undo() {
+        commandStack.undo();
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/redo")
+    public ResponseEntity<?> redo() {
+        commandStack.redo();
+        return ResponseEntity.ok().build();
+    }
+
     /* ---------------------------------------
        POST request to update single cell
        Update cell at {coord} with provided value and/or expression
@@ -72,11 +88,20 @@ public class SpreadsheetController {
 
         CellComponent comp = getCellIfExists(cc);
 
+        // current state
+        CellValue oldValue = comp.getCellValue();
+        Expression oldExpression =  comp.getExpression();
+
+        // variables for new values
+        CellValue newValue = oldValue;
+        Expression newExpression =  oldExpression;
+
         // Update value if provided
         if (body.containsKey("value")) {
             Object v = body.get("value");
             try {
-                comp.setCellValue(parseCellValue(v));
+                // comp.setCellValue(parseCellValue(v));
+                newValue = parseCellValue(v);
             } catch (Exception e) {
                 return ResponseEntity.badRequest().body(Map.of("error", "'value' must be numeric"));
             }
@@ -84,18 +109,26 @@ public class SpreadsheetController {
         // Update expression if provided
         if (body.containsKey("expression")) {
             Object exprObj = body.get("expression");
+
             if (exprObj == null) {
-                comp.setExpression(null);
+                // comp.setExpression(null);
+                newExpression = null;
             } else {
                 String exprStr = String.valueOf(exprObj);
                 try {
                     Expression expr = ExpressionParser.convertExpression(exprStr);
-                    comp.setExpression(expr);
+                    // comp.setExpression(expr);
+                    newExpression = expr;
                 } catch (Exception ex) {
                     return ResponseEntity.badRequest().body(Map.of("error", "Invalid expression: " + ex.getMessage()));
                 }
             }
         }
+
+        // executes command
+        EditCommand command = new EditCommand(comp, oldValue, newValue, oldExpression, newExpression);
+        commandStack.executeCommand(command);
+
         Map<String, Object> rowJson = buildEmptyRow(cc.getRow());
         rowJson.put(toColumnName(cc.getCol()), buildCellJson(comp));
         return ResponseEntity.ok(rowJson);
